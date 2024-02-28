@@ -1,12 +1,17 @@
 'use strict'
 
-/** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class VendaSchema extends Schema {
+class VendasTableSchema extends Schema {
   up () {
     this.create('vendas', (table) => {
       table.increments()
+      table.integer('cliente_id').unsigned().references('id').inTable('clientes').onDelete('cascade')
+      table.integer('produto_id').unsigned().references('id').inTable('produtos').onDelete('cascade')
+      table.integer('quantidade').notNullable()
+      table.decimal('preco_unitario', 10, 2).notNullable()
+      table.decimal('preco_total', 10, 2).notNullable()
+      table.dateTime('data_hora').notNullable()
       table.timestamps()
     })
   }
@@ -16,4 +21,4 @@ class VendaSchema extends Schema {
   }
 }
 
-module.exports = VendaSchema
+module.exports = VendasTableSchema
