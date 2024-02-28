@@ -7,6 +7,9 @@ class ClienteSchema extends Schema {
   up () {
     this.create('clientes', (table) => {
       table.increments()
+      table.string('nome').notNullable()
+      table.string('cpf', 14).notNullable().unique()
+      table.integer('usuario_id').unsigned().references('id').inTable('usuarios').onDelete('cascade')
       table.timestamps()
     })
   }
