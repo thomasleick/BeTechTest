@@ -9,7 +9,7 @@ class ClienteSchema extends Schema {
       table.increments()
       table.string('nome').notNullable()
       table.string('cpf', 14).notNullable().unique()
-      table.integer('usuario_id').unsigned().references('id').inTable('usuarios').onDelete('cascade')
+      table.integer('usuario_id').unsigned().references('id').inTable('users').onDelete('cascade')
       table.timestamps()
     })
   }
