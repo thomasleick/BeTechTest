@@ -16,11 +16,11 @@ module.exports = {
   | interacting with SQL databases.
   |
   */
-  connection: Env.get('DB_CONNECTION', 'sqlite'),
+  connection: Env.get('DB_CONNECTION', 'mysql'),
 
   /*
   |--------------------------------------------------------------------------
-  | Sqlite
+  | Sqlite1
   |--------------------------------------------------------------------------
   |
   | Sqlite is a flat file database and can be good choice under development
