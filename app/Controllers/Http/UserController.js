@@ -1,7 +1,29 @@
 'use strict'
 
-class UserController {
+const User = use('App/Models/User')
 
+class UserController {
+    async signUp({ request, response }) {
+        try {
+        const { email, password } = request.only(['email', 'password'])
+        
+        // Verifica se o usuário já existe
+        const existingUser = await User.findBy('email', email)
+        if (existingUser) {
+            return response.status(400).send({ message: 'Usuário já existe.' })
+        }
+
+        // Cria um novo usuário
+        const user = await User.create({ email, password })
+
+        return response.status(201).send({ message: 'Usuário criado com sucesso.', user })
+        } catch (error) {
+        console.error(error)
+
+        // Lidar com erros de criação de usuário
+        return response.status(500).send({ message: 'Erro ao criar usuário.' })
+        }
+    }
     async login({ request, auth, response }) {
         const { email, password } = request.all()
 
