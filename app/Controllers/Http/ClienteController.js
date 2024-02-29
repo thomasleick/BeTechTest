@@ -3,6 +3,7 @@
 const Cliente = use('App/Models/Cliente')
 const Endereco = use('App/Models/Endereco')
 const Telefone = use('App/Models/Telefone')
+const Venda = use('App/Models/Venda')
 
     class ClienteController {
         async index ({ response }) {
@@ -52,6 +53,37 @@ const Telefone = use('App/Models/Telefone')
     } catch (error) {
       console.error(error)
       return response.status(500).json({ message: 'Erro ao adicionar cliente.' })
+    }
+  }
+
+  async show({ params, request, response }) {
+    try {
+      // Buscar o cliente pelo ID
+      const cliente = await Cliente.find(params.id)
+
+      if (!cliente) {
+        return response.status(404).json({ message: 'Cliente não encontrado' })
+      }
+
+      // Query para buscar todas as vendas do cliente ordenadas pela data, da mais recente para a mais antiga
+      let vendasQuery = cliente.vendas().orderBy('data_hora', 'desc')
+
+      // Verificar se há parâmetros de consulta para filtrar as vendas por mês e ano
+      const { mes, ano } = request.qs
+
+      if (mes && ano) {
+        vendasQuery = vendasQuery
+          .whereRaw('EXTRACT(MONTH FROM data_hora) = ?', [mes])
+          .whereRaw('EXTRACT(YEAR FROM data_hora) = ?', [ano])
+      }
+
+      // Executar a consulta
+      const vendas = await vendasQuery.fetch()
+
+      return response.status(200).json({ cliente, vendas })
+    } catch (error) {
+      console.error(error)
+      return response.status(500).json({ message: 'Erro ao buscar detalhes do cliente' })
     }
   }
 }
