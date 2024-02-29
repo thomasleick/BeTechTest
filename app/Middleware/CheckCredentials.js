@@ -9,7 +9,7 @@ class CheckCredentials {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle ({ request }, next) {
+  async handle ({ request, response }, next) {
     const email = request.input('email')
     const password = request.input('password')
 
