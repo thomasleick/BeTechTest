@@ -18,4 +18,4 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 Route.post('signup', 'UserController.signUp')
-Route.post('login', 'UserController.login')
+Route.post('/login', 'UserController.login').middleware('checkCredentials')
