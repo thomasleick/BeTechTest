@@ -3,7 +3,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-class CheckCredential {
+class CheckCredentials {
   /**
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -20,4 +20,4 @@ class CheckCredential {
   }
 }
 
-module.exports = CheckCredential
+module.exports = CheckCredentials
