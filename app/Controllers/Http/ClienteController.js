@@ -4,6 +4,7 @@ const Cliente = use('App/Models/Cliente')
 const Endereco = use('App/Models/Endereco')
 const Telefone = use('App/Models/Telefone')
 const Venda = use('App/Models/Venda')
+const Database = use('Database')
 
     class ClienteController {
         async index ({ response }) {
@@ -84,6 +85,41 @@ const Venda = use('App/Models/Venda')
     } catch (error) {
       console.error(error)
       return response.status(500).json({ message: 'Erro ao buscar detalhes do cliente' })
+    }
+  }
+
+  async update ({ params, request, response }) {
+    const trx = await Database.beginTransaction()
+
+    try {
+      const cliente = await Cliente.find(params.id)
+
+      if (!cliente) {
+        await trx.rollback()
+        return response.status(404).json({ message: 'Cliente não encontrado.' })
+      }
+
+      // Atualiza os dados do cliente com base nos dados enviados na requisição
+      cliente.merge(request.only(['nome', 'cpf']))
+      await cliente.save(trx)
+
+      // Atualiza os dados do endereço do cliente
+      const endereco = await Endereco.findBy('cliente_id', cliente.id)
+      endereco.merge(request.only(['rua', 'cidade', 'estado', 'cep']))
+      await endereco.save(trx)
+
+      // Atualiza os dados do telefone do cliente
+      const telefone = await Telefone.findBy('cliente_id', cliente.id)
+      telefone.numero = request.input('numero')
+      await telefone.save(trx)
+
+      await trx.commit()
+
+      return response.status(200).json({ message: 'Cliente e informações relacionadas atualizados com sucesso.', cliente })
+    } catch (error) {
+      console.error(error)
+      await trx.rollback()
+      return response.status(500).json({ message: 'Erro ao atualizar cliente e informações relacionadas.' })
     }
   }
 }
