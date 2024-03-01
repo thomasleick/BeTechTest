@@ -17,8 +17,8 @@
 const Route = use('Route')
 
 Route.on('/').render('welcome')
-Route.post('signup', 'UserController.signUp').middleware('checkCredentials')
-Route.post('/login', 'UserController.login').middleware('checkCredentials')
+Route.post('signup', 'UsuarioController.signUp').middleware('checkCredentials')
+Route.post('/login', 'UsuarioController.login').middleware('checkCredentials')
 Route.group(() => {
   Route.get('clientes', 'ClienteController.index').as('clients.index').middleware('auth')
   Route.post('clientes', 'ClienteController.store').as('clients.store').middleware('auth')

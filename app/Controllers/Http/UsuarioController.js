@@ -1,22 +1,22 @@
 'use strict'
 
-const User = use('App/Models/User')
+const Usuario = use('App/Models/Usuario')
 
-class UserController {
+class UsuarioController {
     async signUp({ request, response }) {
         try {
         const { email, password } = request.only(['email', 'password'])
-        
+
         // Verifica se o usuário já existe
-        const existingUser = await User.findBy('email', email)
-        if (existingUser) {
+        const existingUsuario = await Usuario.findBy('email', email)
+        if (existingUsuario) {
             return response.status(400).send({ message: 'Usuário já existe.' })
         }
 
         // Cria um novo usuário
-        const user = await User.create({ email, password })
+        const usuario = await Usuario.create({ email, password })
 
-        return response.status(201).send({ message: 'Usuário criado com sucesso.', user })
+        return response.status(201).send({ message: 'Usuário criado com sucesso.', usuario })
         } catch (error) {
         console.error(error)
 
@@ -39,11 +39,11 @@ class UserController {
             // Lidar com erros de autenticação específicos
             if (error.name === 'PasswordMisMatchException') {
                 return response.status(401).send({ message: 'Senha incorreta. Verifique suas credenciais.' })
-            } 
+            }
 
-            if (error.name === 'UserNotFoundException') {
+            if (error.name === 'UsuarioNotFoundException') {
                 return response.status(404).send({ message: 'Usuário não encontrado. Verifique suas credenciais.' })
-            } 
+            }
 
             return response.status(401).send({ message: 'Falha na autenticação. Verifique suas credenciais.' })
         }
@@ -51,4 +51,4 @@ class UserController {
 
 }
 
-module.exports = UserController
+module.exports = UsuarioController
