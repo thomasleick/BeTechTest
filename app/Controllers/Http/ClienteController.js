@@ -122,6 +122,26 @@ const Database = use('Database')
       return response.status(500).json({ message: 'Erro ao atualizar cliente e informações relacionadas.' })
     }
   }
+
+  async delete ({ params, response }) {
+    try {
+      // Encontrar o cliente pelo ID
+      const cliente = await Cliente.find(params.id)
+
+      // Verificar se o cliente existe
+      if (!cliente) {
+        return response.status(404).json({ message: 'Cliente não encontrado.' })
+      }
+
+      // Excluir o cliente
+      await cliente.delete()
+
+      return response.status(200).json({ message: 'Cliente excluído com sucesso.' })
+    } catch (error) {
+      console.error(error)
+      return response.status(500).json({ message: 'Erro ao excluir cliente.' })
+    }
+  }
 }
 
 module.exports = ClienteController
