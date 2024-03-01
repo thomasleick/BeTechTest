@@ -30,6 +30,22 @@ class ProdutoController {
             return response.status(500).json({ message: 'Falha ao buscar produtos.' })
         }
     }
+
+    async store({ request, response }) {
+        try {
+            // Extrair os dados do produto do corpo da requisição
+            const data = request.only(['nome', 'descricao', 'preco'])
+
+            // Criar um novo produto no banco de dados
+            const produto = await Produto.create(data)
+
+            // Retornar o produto recém-criado
+            return response.status(201).json({ message: 'Produto adicionado com sucesso.', produto })
+        } catch (error) {
+            console.error(error)
+            return response.status(500).json({ message: 'Erro ao adicionar produto.' })
+        }
+    }
 }
 
 module.exports = ProdutoController
