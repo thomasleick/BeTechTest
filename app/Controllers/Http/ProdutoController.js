@@ -51,7 +51,7 @@ class ProdutoController {
         }
     }
 
-    async show({ params, request, response }) {
+    async show({ params, response }) {
         try {
         // Buscar o cliente pelo ID
         const produto = await Produto.find(params.id)
@@ -64,6 +64,27 @@ class ProdutoController {
         } catch (error) {
         console.error(error)
         return response.status(500).json({ message: 'Erro ao buscar detalhes do produto' })
+        }
+    }
+
+    async update ({ params, request, response }) {
+
+        try {
+        const produto = await Produto.find(params.id)
+
+        if (!produto) {
+            return response.status(404).json({ message: 'Produto não encontrado.' })
+        }
+
+        // Atualiza os dados do produto com base nos dados enviados na requisição
+        produto.merge(request.only(['nome', 'descricao', 'preco']))
+        await produto.save()
+
+        return response.status(200).json({ message: 'Produto e informações relacionadas atualizados com sucesso.', produto })
+        } catch (error) {
+        console.error(error)
+        await trx.rollback()
+        return response.status(500).json({ message: 'Erro ao atualizar produto e informações relacionadas.' })
         }
     }
 }
