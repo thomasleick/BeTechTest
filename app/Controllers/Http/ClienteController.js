@@ -3,7 +3,6 @@
 const Cliente = use('App/Models/Cliente')
 const Endereco = use('App/Models/Endereco')
 const Telefone = use('App/Models/Telefone')
-const Venda = use('App/Models/Venda')
 const Database = use('Database')
 
     class ClienteController {
