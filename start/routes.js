@@ -33,3 +33,5 @@ Route.group(() => {
   Route.put('/produtos/:id', 'ProdutoController.update')//.middleware('auth')
   Route.delete('/produtos/:id', 'ProdutoController.delete')//.middleware('auth')
 })
+Route.group(() => {
+  Route.post('/vendas', 'VendaController.store')})//.middleware(['auth'])
