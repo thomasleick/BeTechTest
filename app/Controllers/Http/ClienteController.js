@@ -16,21 +16,29 @@ const Database = use('Database')
             return response.status(204).json({ message: 'No clients found.' })
         }
 
+        if (clients.rows.length === 1) {
+          const client = clients.rows[0]
+          // Retorna apenas os dados essenciais de cada cliente
+          const simplifiedClient = { id: client.id, nome: client.nome, cpf: client.cpf }
+
+          return response.status(200).json({ clientes: [{ ...simplifiedClient }] })
+        }
+
         // Retorna apenas os dados essenciais de cada cliente
         const simplifiedClients = clients.map(client => {
             return {
             id: client.id,
-            name: client.name,
-            email: client.email,
+            nome: client.nome,
+            cpf: client.cpf,
             }
         })
 
-        return response.status(200).json({ clients: simplifiedClients })
+        return response.status(200).json({ clientes: simplifiedClients })
         } catch (error) {
         console.error(error)
         return response.status(500).json({ message: 'Failed to fetch clients.' })
         }
-      } 
+      }
 
       async store({ request, response }) {
         const trx = await Database.beginTransaction()
