@@ -11,17 +11,21 @@ class ProdutoController {
 
             // Verificar se a lista está vazia
             if (produtos.rows.length === 0) {
-            return response.status(204).json({ message: 'Nenhum produto encontrado.' })
+                return response.status(204).json({ message: 'Nenhum produto encontrado.' })
+            }
+
+            // Se houver apenas um produto, retorna diretamente
+            if (produtos.rows.length === 1) {
+                const produto = produtos.rows[0]
+                return response.status(200).json({ produtos: [{ id: produto.id, nome: produto.nome }] })
             }
 
             // Retorna apenas os dados essenciais de cada produto
-            const simplifiedProdutos = produtos.map(produto => {
-            return {
-                id: produto.id,
-                nome: produto.nome,
-                descricao: produto.descricao,
-                // Adicione outros campos essenciais conforme necessário
-            }
+            const simplifiedProdutos = produtos.rows.map(produto => {
+                return {
+                    id: produto.id,
+                    nome: produto.nome,
+                }
             })
 
             return response.status(200).json({ produtos: simplifiedProdutos })
@@ -30,7 +34,6 @@ class ProdutoController {
             return response.status(500).json({ message: 'Falha ao buscar produtos.' })
         }
     }
-
     async store({ request, response }) {
         try {
             // Extrair os dados do produto do corpo da requisição
