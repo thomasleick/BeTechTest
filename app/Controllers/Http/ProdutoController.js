@@ -87,6 +87,31 @@ class ProdutoController {
         return response.status(500).json({ message: 'Erro ao atualizar produto e informações relacionadas.' })
         }
     }
+
+  async delete({ params, response }) {
+    try {
+        // Buscar o produto pelo ID
+        const produto = await Produto.find(params.id)
+
+        if (!produto) {
+            return response.status(404).json({ message: 'Produto não encontrado.' })
+        }
+
+        // Verificar se o produto já está deletado
+        if (produto.deletado) {
+            return response.status(400).json({ message: 'Produto já está excluído.' })
+        }
+
+        // Realizar a exclusão lógica, alterando o valor da coluna "deletado" para true
+        produto.merge({ deletado: true })
+        await produto.save()
+
+        return response.status(200).json({ message: 'Produto excluído com sucesso.' })
+    } catch (error) {
+        console.error(error)
+        return response.status(500).json({ message: 'Erro ao excluir o produto.' })
+    }
+  }
 }
 
 module.exports = ProdutoController
