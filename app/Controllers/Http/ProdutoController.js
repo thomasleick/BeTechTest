@@ -34,6 +34,7 @@ class ProdutoController {
             return response.status(500).json({ message: 'Falha ao buscar produtos.' })
         }
     }
+
     async store({ request, response }) {
         try {
             // Extrair os dados do produto do corpo da requisição
@@ -47,6 +48,22 @@ class ProdutoController {
         } catch (error) {
             console.error(error)
             return response.status(500).json({ message: 'Erro ao adicionar produto.' })
+        }
+    }
+
+    async show({ params, request, response }) {
+        try {
+        // Buscar o cliente pelo ID
+        const produto = await Produto.find(params.id)
+
+        if (!produto) {
+            return response.status(404).json({ message: 'Produto não encontrado' })
+        }
+
+        return response.status(200).json(produto)
+        } catch (error) {
+        console.error(error)
+        return response.status(500).json({ message: 'Erro ao buscar detalhes do produto' })
         }
     }
 }
