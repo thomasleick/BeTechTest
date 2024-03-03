@@ -62,7 +62,6 @@ const Database = use('Database')
           return response.status(201).json({ message: 'Cliente adicionado com sucesso.', cliente, endereco, telefone })
         } catch (error) {
           await trx.rollback()
-          console.error(error)
           // Verificar se o erro é de duplicação de entrada (ER_DUP_ENTRY)
           if (error.code === 'ER_DUP_ENTRY') {
             return response.status(400).json({ message: 'Já existe um cliente com este cpf.' })
@@ -135,8 +134,12 @@ const Database = use('Database')
 
       return response.status(200).json({ message: 'Cliente e informações relacionadas atualizados com sucesso.', cliente })
     } catch (error) {
-      console.error(error)
+
       await trx.rollback()
+      if (error.code === 'ER_DUP_ENTRY') {
+          return response.status(400).json({ message: 'Já existe um cliente com este cpf.' })
+      }
+      console.error(error)
       return response.status(500).json({ message: 'Erro ao atualizar cliente e informações relacionadas.' })
     }
   }
