@@ -21,7 +21,7 @@ Route.post('signup', 'UsuarioController.signUp').middleware('checkCredentials')
 Route.post('/login', 'UsuarioController.login').middleware('checkCredentials')
 Route.group(() => {
   Route.get('clientes', 'ClienteController.index').as('clients.index').middleware('auth')
-  Route.post('clientes', 'ClienteController.store').as('clients.store').middleware('auth')
+  Route.post('clientes', 'ClienteController.store').as('clients.store').middleware('auth').middleware('validateParams:ClienteValidator')
   Route.get('clientes/:id', 'ClienteController.show').as('clients.show').middleware('auth')
   Route.put('clientes/:id', 'ClienteController.update').as('clients.update').middleware('auth')
   Route.delete('clientes/:id', 'ClienteController.delete').as('clients.delete').middleware('auth')

@@ -49,14 +49,13 @@ const Database = use('Database')
           const telefoneData = request.only(['numero'])
 
           // Criar um novo cliente no banco de dados
-          const cliente = await Cliente.create(data)
+          const cliente = await Cliente.create(data, trx)
 
           // Criar um novo endereço associado ao cliente
-          const endereco = await Endereco.create({ ...enderecoData, cliente_id: cliente.id })
+          const endereco = await Endereco.create({ ...enderecoData, cliente_id: cliente.id }, trx)
 
           // Criar um novo telefone associado ao cliente
-          const telefone = await Telefone.create({ ...telefoneData, cliente_id: cliente.id })
-
+          const telefone = await Telefone.create({ ...telefoneData, cliente_id: cliente.id }, trx)
           await trx.commit()
 
           // Retornar o cliente, endereço e telefone recém-criados
@@ -64,9 +63,17 @@ const Database = use('Database')
         } catch (error) {
           await trx.rollback()
           console.error(error)
+          // Verificar se o erro é de duplicação de entrada (ER_DUP_ENTRY)
+          if (error.code === 'ER_DUP_ENTRY') {
+            return response.status(400).json({ message: 'Já existe um cliente com este cpf.' })
+          }
+
+          // Lidar com outros erros de maneira genérica
+          console.error(error)
           return response.status(500).json({ message: 'Erro ao adicionar cliente.' })
         }
-    }
+      }
+
 
   async show({ params, request, response }) {
     try {
