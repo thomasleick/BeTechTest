@@ -14,11 +14,11 @@ class ProdutoValidator {
 
       } else {
         validationRules.nome = 'string'
-        validationRules.preco = 'regex:^[0-9]*\.[0-9]{2}$'
+        validationRules.preco = 'regex:^([0-9]*\.[0-9]{2}$)?'
       }
 
       // Valide os dados de acordo com as regras definidas
-      await validateAll({...data, preco: data.preco.toString()}, validationRules)
+      await validateAll({...data, preco: data?.preco?.toString()}, validationRules)
 
       // Se a validação for bem-sucedida, retorne true
       return true
