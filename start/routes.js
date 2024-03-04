@@ -29,7 +29,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/produtos', 'ProdutoController.index').middleware('auth')
   Route.get('/produtos/:id', 'ProdutoController.show').middleware('auth')
-  Route.post('/produtos', 'ProdutoController.store').middleware('auth')
+  Route.post('/produtos', 'ProdutoController.store').middleware('auth').middleware('validateParams:ProdutoValidator')
   Route.put('/produtos/:id', 'ProdutoController.update').middleware('auth')
   Route.delete('/produtos/:id', 'ProdutoController.delete').middleware('auth')
 })
