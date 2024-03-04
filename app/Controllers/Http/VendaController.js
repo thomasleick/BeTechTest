@@ -2,6 +2,7 @@
 
 const Produto = use('App/Models/Produto')
 const Venda = use('App/Models/Venda')
+const Cliente = use('App/models/Cliente')
 
 class VendaController {
   async store({ request, response }) {
@@ -9,6 +10,12 @@ class VendaController {
       // Extrair os dados do produto do corpo da requisição
       const { cliente_id, produto_id, quantidade } = request.only(['cliente_id', 'produto_id', 'quantidade'])
 
+      const cliente = await Cliente.find(cliente_id)
+
+      // Verificar se o cliente existe
+      if (!cliente) {
+        return response.status(404).json({ message: 'Cliente não encontrado.' })
+      }
       // Procurar o produto pelo id
       const produto = await Produto.find(produto_id)
 

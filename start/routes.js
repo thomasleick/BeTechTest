@@ -34,4 +34,4 @@ Route.group(() => {
   Route.delete('/produtos/:id', 'ProdutoController.delete').middleware('auth')
 })
 Route.group(() => {
-  Route.post('/vendas', 'VendaController.store')}).middleware(['auth'])
+  Route.post('/vendas', 'VendaController.store').middleware(['auth']).middleware('validateParams:VendaValidator')})

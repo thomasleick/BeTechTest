@@ -45,7 +45,7 @@ class UsuarioController {
                 return response.status(404).send({ message: 'Usuário não encontrado. Verifique suas credenciais.' })
             }
 
-            return response.status(401).send({ message: 'Falha na autenticação. Verifique suas credenciais.' })
+            return response.status(500).send({ message: 'Erro interno do servidor.' })
         }
     }
 
