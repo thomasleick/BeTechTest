@@ -1,5 +1,11 @@
 # Sells API RESTful
 
+## Try this API
+
+https://betechtest.onrender.com/
+
+## About
+
 This RESTful API is developed using the Adonis framework (Node.js) and is intended to provide functionalities for managing clients, products, and sales. The database is structured according to the minimum requirements and includes tables for users, clients, addresses, phones, products, and sales.
 
 ## Setup
