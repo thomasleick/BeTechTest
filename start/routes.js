@@ -35,3 +35,7 @@ Route.group(() => {
 })
 Route.group(() => {
   Route.post('/vendas', 'VendaController.store').middleware(['auth']).middleware('validateParams:VendaValidator')})
+
+Route.get('/health', ({ response }) => {
+  return response.sendStatus(200);
+});
